@@ -180,6 +180,7 @@
         self.flake.${system}.checks
         // {
           formatCheck = formatCheckFor system;
+          plutarch-numeric = self.flake.${system}.packages."plutarch-numeric:lib:plutarch-numeric";
         }
       );
       check = perSystem (system:
