@@ -1,10 +1,8 @@
 SHELL := env bash
 
 .PHONY: hoogle \
-	build test accept_pirs watch ghci readme_contents \
-	format lint requires_nix_shell vis_blockchain \
-	costing extra_suite costing_clean vis_clean\
-	diagrams diagram_pngs clean_diagrams haddock clean_haddock
+	build dev watch test ghci \
+	format lint haddock clean_haddock
 
 usage:
 	@echo "usage: make <command> [OPTIONS]"
@@ -22,7 +20,6 @@ usage:
 	@echo "  nixfmt_check        -- Check nix files for format errors"
 	@echo "  lint                -- Apply hlint suggestions"
 	@echo "  lint_check          -- Check hlint suggestions"
-	@echo "  readme_contents     -- Add table of contents to README"
 	@echo "  hasktags            -- Build ctags/etags files"
 	@echo "  haddock             -- Build haddock docs"
 
@@ -41,7 +38,6 @@ build: requires_nix_shell
 
 dev: requires_nix_shell
 	cabal v2-build $(GHC_FLAGS) -f development
-
 
 watch: requires_nix_shell
 	while sleep 1;																				\
@@ -103,39 +99,10 @@ lint: requires_nix_shell
 lint_check: requires_nix_shell
 	hlint $(FORMAT_SOURCES)
 
-readme_contents:
-	echo "this command is not nix-ified, you may receive an error from npx"
-	npx markdown-toc ./README.md --no-firsth1
-
 # Target to use as dependency to fail if not inside nix-shell
 requires_nix_shell:
 	@ [ "$(IN_NIX_SHELL)" ] || echo "The $(MAKECMDGOALS) target must be run from inside a nix shell"
 	@ [ "$(IN_NIX_SHELL)" ] || (echo "    run 'nix develop' first" && false)
-
-
-PLUTUS_BRANCH = $(shell jq '.plutus.branch' ./nix/sources.json )
-PLUTUS_REPO = $(shell jq '.plutus.owner + "/" + .plutus.repo' ./nix/sources.json )
-PLUTUS_REV = $(shell jq '.plutus.rev' ./nix/sources.json )
-PLUTUS_SHA256 = $(shell jq '.plutus.sha256' ./nix/sources.json )
-
-update_plutus:
-	@echo "Updating plutus version to latest commit at $(PLUTUS_REPO) $(PLUTUS_BRANCH)"
-	niv update plutus
-	@echo "Latest commit: $(PLUTUS_REV)"
-	@echo "Sha256: $(PLUTUS_SHA256)"
-	@echo "Make sure to update the plutus rev in stack.yaml with:"
-	@echo "    commit: $(PLUTUS_REV)"
-	@echo "This may require further resolution of dependency versions."
-
-################################################################################
-# Utils
-
-build_path = dist-newstyle/build/x86_64-linux/ghc-8.10.4.20210212/liqwidx-0.1
-clear_build:
-	@[ ! -e $(build_path) ] || rm -rf $(build_path)
-
-################################################################################
-# Docs
 
 hasktags:
 	hasktags -b ./src ./test ./testlib
