@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs.follows = "plutarch/nixpkgs";
-    nixpkgs-latest.url = "github:NixOS/nixpkgs?rev=a0a69be4b5ee63f1b5e75887a406e9194012b492";
+    nixpkgs-latest.url = "github:NixOS/nixpkgs";
 
     # temporary fix for nix versions that have the transitive follows bug
     # see https://github.com/NixOS/nix/issues/6013
@@ -36,10 +36,7 @@
       [
         liqwid-nix.haskellProject
         liqwid-nix.plutarchProject
-        (liqwid-nix.addChecks
-          {
-            plutarch-numeric = "plutarch-numeric:lib:plutarch-numeric";
-          })
+        liqwid-nix.addBuildChecks
         (liqwid-nix.enableFormatCheck [
           "-XTemplateHaskell"
           "-XTypeApplications"
