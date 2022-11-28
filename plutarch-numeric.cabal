@@ -12,7 +12,7 @@ maintainer:         Koz Ross <koz@mlabs.city>
 copyright:          (C) 2022 Liqwid Labs
 category:           Test
 build-type:         Simple
-tested-with:        GHC ==9.2.1
+tested-with:        GHC ==9.2.4
 extra-source-files:
   LICENSE
   README.md
@@ -46,6 +46,7 @@ common common-lang
     FlexibleInstances
     GeneralisedNewtypeDeriving
     HexFloatLiterals
+    ImportQualifiedPost
     InstanceSigs
     KindSignatures
     LambdaCase
