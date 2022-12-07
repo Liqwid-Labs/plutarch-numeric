@@ -6,7 +6,7 @@ module Plutarch.Numeric.Additive (
 
 import Plutarch (Term)
 import Plutarch.Integer (PInteger)
-import qualified Prelude
+import Prelude qualified
 
 -- | @since 1.0.0
 class AdditiveSemigroup a where
